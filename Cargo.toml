@@ -1,0 +1,8 @@
+[package]
+name = "pure-prompt"
+version = "0.1.0"
+authors = ["Xavier Cambar <xcambar@gmail.com>"]
+
+[dependencies]
+
+ansi_term = "0.9"
