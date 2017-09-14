@@ -6,3 +6,4 @@ authors = ["Xavier Cambar <xcambar@gmail.com>"]
 [dependencies]
 
 ansi_term = "0.9"
+regex = "0.2"
