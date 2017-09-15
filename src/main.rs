@@ -74,6 +74,7 @@ fn main() {
     };
     let display_branch = Cyan.paint(branch);
 
+    println!("");
     println!("{} {}", display_path, display_branch);
     print!(" {} ", Purple.paint("❯"));
 }
