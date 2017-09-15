@@ -31,6 +31,7 @@ fn fmt_current_path(cwd: &str) -> String {
 
 fn repo_status(r: Repository) -> String {
     let mut opts = StatusOptions::new();
+    opts.include_untracked(true);
     let head = r.head().unwrap();
     let shorthand = Cyan.paint(head.shorthand().unwrap().to_string());
     let statuses = r.statuses(Some(&mut opts)).unwrap();
