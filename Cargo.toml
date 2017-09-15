@@ -6,4 +6,5 @@ authors = ["Xavier Cambar <xcambar@gmail.com>"]
 [dependencies]
 
 ansi_term = "0.9"
+git2 = "0.6"
 regex = "0.2"
