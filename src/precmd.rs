@@ -74,4 +74,3 @@ pub fn display() {
     println!("");
     println!("{} {}", display_path, display_branch);
 }
-
