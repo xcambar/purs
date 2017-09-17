@@ -1,5 +1,4 @@
 use std::env;
-use ansi_term::Colour::{Red, Purple};
 
 const SYMBOL:&str = "❯";
 
@@ -10,10 +9,10 @@ pub fn display() {
     Err(_e) => 1
   };
 
-  let printable_prompt = match last_command {
-    0 => Purple.paint(SYMBOL),
-    _ => Red.paint(SYMBOL),
+  let shell_color = match last_command {
+    0 => 5,
+    _ => 9,
   };
 
-  print!("{}", printable_prompt);
+  print!("%F{{{}}}{}%f", shell_color, SYMBOL);
 }
