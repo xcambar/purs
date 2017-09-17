@@ -1,18 +1,17 @@
-use std::env;
+const INSERT_SYMBOL:&str = "❯";
+const COMMAND_SYMBOL:&str = "⬢";
 
-const SYMBOL:&str = "❯";
-
-pub fn display() {
-  let var = env::var("_LAST_RETURN_STATUS");
-  let last_command = match var {
-    Ok(val) => val.parse::<u8>().unwrap(),
-    Err(_e) => 1
+pub fn display(return_code: &str, keymap: &str) {
+  let symbol = match keymap {
+    "vicmd" => COMMAND_SYMBOL,
+    _ => INSERT_SYMBOL,
   };
 
-  let shell_color = match last_command {
-    0 => 5,
+  let shell_color = match (symbol, return_code) {
+    (COMMAND_SYMBOL, _) => 3,
+    (_, "0") => 5,
     _ => 9,
   };
 
-  print!("%F{{{}}}{}%f", shell_color, SYMBOL);
+  print!("%F{{{}}}{}%f ", shell_color, symbol);
 }
