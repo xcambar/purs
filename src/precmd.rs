@@ -4,6 +4,7 @@ use ansi_term::ANSIStrings;
 use git2;
 use git2::{Repository, StatusOptions};
 use regex::Regex;
+use clap::{ArgMatches, App, SubCommand};
 
 fn first_char(s: &str) -> String {
   let chars: Vec<char> = s.chars().collect();
@@ -56,14 +57,14 @@ fn repo_status(r: Repository) -> String {
       false => continue,
     }
   }
+  let mut out = vec![shorthand];
   if is_dirty == true {
-    return ANSIStrings(&[shorthand, Red.bold().paint("*")]).to_string();
-  } else {
-    return ANSIStrings(&[shorthand]).to_string();
+    out.push(Red.bold().paint("*"));
   }
+  return ANSIStrings(&out).to_string();
 }
 
-pub fn display() {
+pub fn display(_sub: &ArgMatches) {
   let my_path = env::current_dir().unwrap();
   let display_path = Blue.paint(fmt_current_path(my_path.to_str().unwrap()));
 
@@ -75,4 +76,8 @@ pub fn display() {
 
   println!("");
   println!("{} {}", display_path, display_branch);
+}
+
+pub fn cli_arguments<'a>() -> App<'a, 'a> {
+  SubCommand::with_name("precmd")
 }
