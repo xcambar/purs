@@ -9,7 +9,7 @@ mod prompt;
 mod precmd;
 
 fn main() {
-    let matches = App::new("Pure prompt")
+    let matches = App::new("Purs")
       .setting(AppSettings::SubcommandRequired)
       .subcommand(precmd::cli_arguments())
       .subcommand(prompt::cli_arguments())

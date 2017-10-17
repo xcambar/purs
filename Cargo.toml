@@ -1,5 +1,5 @@
 [package]
-name = "pure-prompt"
+name = "purs"
 version = "0.1.0"
 authors = ["Xavier Cambar <xcambar@gmail.com>"]
 
