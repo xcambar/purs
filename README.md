@@ -25,7 +25,7 @@ autoload -Uz add-zsh-hook
 function _prompt_purs_precmd() {
   /PATH/TO/PURS/target/release/purs precmd
 }
-add-zsh-hook precmd _prompt_pure_precmd
+add-zsh-hook precmd _prompt_purs_precmd
 
 ```
 
