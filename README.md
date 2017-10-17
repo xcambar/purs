@@ -4,6 +4,8 @@ A [Pure](https://github.com/sindresorhus/pure)-inspired prompt in [Rust](https:/
 
 Even more minimal, definitively faster and at least as pretty as the original Pure by [Sindre Sohrus](https://github.com/sindresorhus).
 
+![Screenshot of Purs in action](./static/imgs/prompt.png)
+
 ## Installation — Usage
 
 1. Set up your Rust environment (use a Nightly build)
