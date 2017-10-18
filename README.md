@@ -9,7 +9,7 @@ Even more minimal, definitively faster and at least as pretty as the original Pu
 ## Installation — Usage
 
 1. Set up your Rust environment (use a Nightly build)
-1. `$ cargo build release`
+1. `$ cargo build --release`
 1. Add the following to your ZSH configuration:
 
 ```
