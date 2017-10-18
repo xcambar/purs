@@ -28,7 +28,7 @@ fn fmt_current_path(cwd: &str) -> String {
   short_path.join("/")
 }
 
-fn repo_status(r: Repository) -> String {
+fn repo_status(r: &Repository) -> String {
   let mut opts = StatusOptions::new();
   opts.include_untracked(true);
   let head = r.head().unwrap();
@@ -71,7 +71,7 @@ pub fn display(_sub: &ArgMatches) {
   let display_path = Blue.paint(fmt_current_path(my_path.to_str().unwrap()));
 
   let branch = match Repository::open(my_path) {
-    Ok(repo) => repo_status(repo),
+    Ok(repo) => repo_status(&repo),
     Err(_e) => String::from(""),
   };
   let display_branch = Cyan.paint(branch);
