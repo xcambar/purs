@@ -15,11 +15,12 @@ fn first_char(s: &str) -> String {
 }
 
 fn fmt_current_path(cwd: &str) -> String {
-  let home: Regex = match env::home_dir() {
-    Some(path) => Regex::new(path.to_str().unwrap()).unwrap(),
-    None => Regex::new("").unwrap(),
+  let friendly_path = if let Some(path) = env::home_dir() {
+    Regex::new(path.to_str().unwrap()).unwrap().replace(cwd, "~").to_string()
+  } else {
+    String::from("")
   };
-  let friendly_path = home.replace(cwd, "~").to_string();
+
   let mut friendly_path_split: Vec<&str> = friendly_path.split("/").collect();
   let current_dir = friendly_path_split.pop().unwrap().to_string();
   let mut short_path: Vec<String> = friendly_path_split.iter().map(|s| first_char(s)).collect();
