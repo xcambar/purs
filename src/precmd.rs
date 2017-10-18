@@ -8,10 +8,10 @@ use clap::{ArgMatches, App, SubCommand};
 
 fn first_char(s: &str) -> String {
   let chars: Vec<char> = s.chars().collect();
-  return match chars.len() {
+  match chars.len() {
     0 => String::from(""),
     _ => chars[0].to_string(),
-  };
+  }
 }
 
 fn fmt_current_path(cwd: &str) -> String {
@@ -61,7 +61,8 @@ fn repo_status(r: Repository) -> String {
   if is_dirty == true {
     out.push(Red.bold().paint("*"));
   }
-  return ANSIStrings(&out).to_string();
+
+  ANSIStrings(&out).to_string()
 }
 
 pub fn display(_sub: &ArgMatches) {
