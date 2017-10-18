@@ -57,7 +57,7 @@ fn repo_status(r: &Repository) -> String {
     if is_dirty { break }
   }
   let mut out = vec![shorthand];
-  if is_dirty == true {
+  if is_dirty {
     out.push(Red.bold().paint("*"));
   }
 
