@@ -1,8 +1,7 @@
 use std::env;
 use ansi_term::Colour::{Cyan, Blue, Red};
 use ansi_term::ANSIStrings;
-use git2;
-use git2::{Repository, StatusOptions};
+use git2::{self, Repository, StatusOptions};
 use regex::Regex;
 use clap::{ArgMatches, App, SubCommand};
 
@@ -68,7 +67,7 @@ pub fn display(_sub: &ArgMatches) {
   let my_path = env::current_dir().unwrap();
   let display_path = Blue.paint(fmt_current_path(my_path.to_str().unwrap()));
 
-  let branch = match Repository::open(my_path) {
+  let branch = match Repository::discover(my_path) {
     Ok(repo) => repo_status(&repo),
     Err(_e) => String::from(""),
   };
