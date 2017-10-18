@@ -21,7 +21,7 @@ fn fmt_current_path(cwd: &str) -> String {
     String::from("")
   };
 
-  let mut friendly_path_split: Vec<&str> = friendly_path.split("/").collect();
+  let mut friendly_path_split: Vec<&str> = friendly_path.split('/').collect();
   let current_dir = friendly_path_split.pop().unwrap().to_string();
   let mut short_path: Vec<String> = friendly_path_split.iter().map(|s| first_char(s)).collect();
   short_path.push(current_dir);
