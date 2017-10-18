@@ -2,19 +2,21 @@ use clap::{ArgMatches, App, SubCommand, Arg};
 
 const INSERT_SYMBOL:&str = "❯";
 const COMMAND_SYMBOL:&str = "⬢";
+const COMMAND_KEYMAP:&str = "vicmd";
+const NO_ERROR:&str = "0";
 
 pub fn display(sub_matches: &ArgMatches) {
   let last_return_code = sub_matches.value_of("last_return_code").unwrap_or("0");
   let keymap = sub_matches.value_of("keymap").unwrap_or("US");
   
   let symbol = match keymap {
-    "vicmd" => COMMAND_SYMBOL,
+    COMMAND_KEYMAP => COMMAND_SYMBOL,
     _ => INSERT_SYMBOL,
   };
 
   let shell_color = match (symbol, last_return_code) {
     (COMMAND_SYMBOL, _) => 3,
-    (_, "0") => 5,
+    (_, NO_ERROR) => 5,
     _ => 9,
   };
 
