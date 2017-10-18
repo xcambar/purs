@@ -4,8 +4,8 @@ const INSERT_SYMBOL:&str = "❯";
 const COMMAND_SYMBOL:&str = "⬢";
 
 pub fn display(sub_matches: &ArgMatches) {
-  let last_return_code = sub_matches.value_of("last_return_code").unwrap();
-  let keymap = sub_matches.value_of("keymap").unwrap();
+  let last_return_code = sub_matches.value_of("last_return_code").unwrap_or("0");
+  let keymap = sub_matches.value_of("keymap").unwrap_or("US");
       
   
   let symbol = match keymap {
