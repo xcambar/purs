@@ -53,10 +53,8 @@ fn repo_status(r: &Repository) -> String {
       s if s.contains(git2::STATUS_WT_TYPECHANGE) => true,
       _ => false,
     };
-    match is_dirty {
-      true => break,
-      false => continue,
-    }
+
+    if is_dirty { break }
   }
   let mut out = vec![shorthand];
   if is_dirty == true {
