@@ -34,5 +34,5 @@ pub fn cli_arguments<'a>() -> App<'a, 'a> {
       Arg::with_name("keymap")
         .short("k")
         .takes_value(true)
-    );
+    )
 }
