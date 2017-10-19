@@ -28,12 +28,19 @@ fn fmt_current_path(cwd: &str) -> String {
   short_path.join("/")
 }
 
-fn repo_status(r: &Repository) -> String {
+fn repo_status(r: &Repository) -> Option<String> {
   let mut opts = StatusOptions::new();
   opts.include_untracked(true);
-  let head = r.head().unwrap();
+  let head = match r.head() {
+    Ok(head) => head,
+    Err(_) => return None
+  };
+
   let shorthand = Cyan.paint(head.shorthand().unwrap().to_string());
-  let statuses = r.statuses(Some(&mut opts)).unwrap();
+  let statuses = match r.statuses(Some(&mut opts)) {
+    Ok(statuses) => statuses,
+    Err(_) => return None
+  };
 
   let mut is_dirty = false;
 
@@ -61,7 +68,7 @@ fn repo_status(r: &Repository) -> String {
     out.push(Red.bold().paint("*"));
   }
 
-  ANSIStrings(&out).to_string()
+  Some(ANSIStrings(&out).to_string())
 }
 
 pub fn display(_sub: &ArgMatches) {
@@ -70,9 +77,9 @@ pub fn display(_sub: &ArgMatches) {
 
   let branch = match Repository::open(my_path) {
     Ok(repo) => repo_status(&repo),
-    Err(_e) => String::from(""),
+    Err(_e) => None,
   };
-  let display_branch = Cyan.paint(branch);
+  let display_branch = Cyan.paint(branch.unwrap_or_default());
 
   println!("");
   println!("{} {}", display_path, display_branch);
