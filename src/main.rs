@@ -1,3 +1,5 @@
+#[macro_use]
+extern crate try_opt;
 extern crate ansi_term;
 extern crate clap;
 extern crate git2;
