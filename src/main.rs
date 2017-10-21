@@ -2,6 +2,7 @@ extern crate ansi_term;
 extern crate clap;
 extern crate git2;
 extern crate regex;
+extern crate tico;
 
 use clap::{App, AppSettings};
 
