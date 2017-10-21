@@ -4,27 +4,15 @@ use ansi_term::ANSIStrings;
 use git2::{self, Repository, StatusOptions};
 use regex::Regex;
 use clap::{ArgMatches, App, SubCommand};
+use tico::tico;
 
-fn first_char(s: &str) -> String {
-  let chars: Vec<char> = s.chars().collect();
-  match chars.len() {
-    0 => String::from(""),
-    _ => chars[0].to_string(),
-  }
-}
-
-fn fmt_current_path(cwd: &str) -> String {
-  let friendly_path = if let Some(path) = env::home_dir() {
-    Regex::new(path.to_str().unwrap()).unwrap().replace(cwd, "~").to_string()
-  } else {
-    String::from("")
+fn shorten_path(cwd: &str) -> String {
+  let friendly_path = match env::home_dir() {
+    Some(path) => Regex::new(path.to_str().unwrap()).unwrap().replace(cwd, "~"),
+    _ => return String::from("")
   };
 
-  let mut friendly_path_split: Vec<&str> = friendly_path.split('/').collect();
-  let current_dir = friendly_path_split.pop().unwrap().to_string();
-  let mut short_path: Vec<String> = friendly_path_split.iter().map(|s| first_char(s)).collect();
-  short_path.push(current_dir);
-  short_path.join("/")
+  return tico(&friendly_path);
 }
 
 fn repo_status(r: &Repository) -> Option<String> {
@@ -72,7 +60,7 @@ fn repo_status(r: &Repository) -> Option<String> {
 
 pub fn display(_sub: &ArgMatches) {
   let my_path = env::current_dir().unwrap();
-  let display_path = Blue.paint(fmt_current_path(my_path.to_str().unwrap()));
+  let display_path = Blue.paint(shorten_path(my_path.to_str().unwrap()));
 
   let branch = match Repository::discover(my_path) {
     Ok(repo) => repo_status(&repo),
