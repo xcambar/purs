@@ -3,7 +3,7 @@ use ansi_term::Colour::{Cyan, Blue, Red, Green, Purple};
 use ansi_term::{ANSIStrings, ANSIGenericString};
 use git2::{self, Repository, StatusOptions};
 use regex::Regex;
-use clap::{ArgMatches, App, SubCommand};
+use clap::{ArgMatches, App, SubCommand, Arg};
 use tico::tico;
 
 fn shorten_path(cwd: &str) -> String {
@@ -15,43 +15,51 @@ fn shorten_path(cwd: &str) -> String {
   tico(&friendly_path)
 }
 
-fn repo_status(r: &Repository) -> Option<String> {
+fn repo_status(r: &Repository, detailed: bool) -> Option<String> {
   let mut out = vec![];
 
   if let Some(name) = get_head_shortname(r) {
     out.push(Cyan.paint(name));
   }
 
-  if let Some((ahead, behind)) = get_ahead_behind(r) {
-    if ahead > 0 {
-      out.push(Cyan.paint(format!("↑{}", ahead)));
+  if !detailed {
+    if let Some((index_change, wt_change, conflicted, untracked)) = count_files_statuses(r) {
+      if index_change != 0 || wt_change != 0 || conflicted != 0 || untracked != 0 {
+        out.push(Red.bold().paint("*"));
+      }
     }
-    if behind > 0 {
-      out.push(Cyan.paint(format!("↓{}", behind)));
+  } else {
+    if let Some((ahead, behind)) = get_ahead_behind(r) {
+      if ahead > 0 {
+        out.push(Cyan.paint(format!("↑{}", ahead)));
+      }
+      if behind > 0 {
+        out.push(Cyan.paint(format!("↓{}", behind)));
+      }
     }
-  }
 
-  if let Some((index_change, wt_change, conflicted, untracked)) = count_files_statuses(r) {
-    if index_change == 0 && wt_change == 0 && conflicted == 0 && untracked == 0 {
-      out.push(Green.paint("✔"));
-    } else {
-      if index_change > 0 {
-        out.push(Green.paint(format!("♦{}", index_change)));
-      }
-      if conflicted > 0 {
-        out.push(Red.paint(format!("✖{}", conflicted)));
-      }
-      if wt_change > 0 {
-        out.push(ANSIGenericString::from(format!("✚{}", wt_change)));
-      }
-      if untracked > 0 {
-        out.push(ANSIGenericString::from("…"));
+    if let Some((index_change, wt_change, conflicted, untracked)) = count_files_statuses(r) {
+      if index_change == 0 && wt_change == 0 && conflicted == 0 && untracked == 0 {
+        out.push(Green.paint("✔"));
+      } else {
+        if index_change > 0 {
+          out.push(Green.paint(format!("♦{}", index_change)));
+        }
+        if conflicted > 0 {
+          out.push(Red.paint(format!("✖{}", conflicted)));
+        }
+        if wt_change > 0 {
+          out.push(ANSIGenericString::from(format!("✚{}", wt_change)));
+        }
+        if untracked > 0 {
+          out.push(ANSIGenericString::from("…"));
+        }
       }
     }
-  }
 
-  if let Some(action) = get_action(r) {
-    out.push(Purple.paint(format!(" {}", action)));
+    if let Some(action) = get_action(r) {
+      out.push(Purple.paint(format!(" {}", action)));
+    }
   }
 
   Some(ANSIStrings(&out).to_string())
@@ -178,12 +186,12 @@ fn get_action(r: &Repository) -> Option<String> {
   None
 }
 
-pub fn display(_sub: &ArgMatches) {
+pub fn display(sub_matches: &ArgMatches) {
   let my_path = env::current_dir().unwrap();
   let display_path = Blue.paint(shorten_path(my_path.to_str().unwrap()));
 
   let branch = match Repository::discover(my_path) {
-    Ok(repo) => repo_status(&repo),
+    Ok(repo) => repo_status(&repo, sub_matches.is_present("git-detailed")),
     Err(_e) => None,
   };
   let display_branch = Cyan.paint(branch.unwrap_or_default());
@@ -194,4 +202,9 @@ pub fn display(_sub: &ArgMatches) {
 
 pub fn cli_arguments<'a>() -> App<'a, 'a> {
   SubCommand::with_name("precmd")
+    .arg(
+      Arg::with_name("git-detailed")
+        .long("git-detailed")
+        .help("Prints detailed git status")
+    )
 }
