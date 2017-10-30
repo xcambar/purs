@@ -68,8 +68,7 @@ pub fn display(_sub: &ArgMatches) {
   };
   let display_branch = Cyan.paint(branch.unwrap_or_default());
 
-  println!("");
-  println!("{} {}", display_path, display_branch);
+  println!("\n{} {}", display_path, display_branch);
 }
 
 pub fn cli_arguments<'a>() -> App<'a, 'a> {
