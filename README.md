@@ -1,5 +1,7 @@
 # Purs
 
+[![Build Status](https://travis-ci.org/xcambar/purs.svg?branch=travis)](https://travis-ci.org/xcambar/purs)
+
 A [Pure](https://github.com/sindresorhus/pure)-inspired prompt in [Rust](https://www.rust-lang.org/).
 
 Even more minimal, definitively faster and at least as pretty as the original Pure by [Sindre Sohrus](https://github.com/sindresorhus).
