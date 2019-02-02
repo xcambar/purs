@@ -1,12 +1,12 @@
 [package]
 authors = ["Xavier Cambar <xcambar@gmail.com>"]
 name = "purs"
-version = "0.1.0"
+version = "0.2.0"
 
 [dependencies]
-ansi_term = "0.9"
-clap = "2.26.1"
-git2 = "0.6"
-regex = "0.2"
-tico = "1.0.0"
-try_opt = "0.1.1"
+ansi_term = "0.11"
+clap = "2.32"
+git2 = "0.8"
+regex = "1.1"
+tico = "1.0"
+dirs = "1.0"
