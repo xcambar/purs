@@ -27,34 +27,34 @@ fn repo_status(r: &Repository, detailed: bool) -> Option<String> {
     if !detailed {
         if let Some((index_change, wt_change, conflicted, untracked)) = count_files_statuses(r) {
             if index_change != 0 || wt_change != 0 || conflicted != 0 || untracked != 0 {
-                out.push(Red.bold().paint("*"));
+                out.push(Red.bold().paint(" *"));
             }
         }
     } else {
         if let Some((ahead, behind)) = get_ahead_behind(r) {
             if ahead > 0 {
-                out.push(Cyan.paint(format!("↑{}", ahead)));
+                out.push(Cyan.paint(format!(" ↑ {}", ahead)));
             }
             if behind > 0 {
-                out.push(Cyan.paint(format!("↓{}", behind)));
+                out.push(Cyan.paint(format!(" ↓ {}", behind)));
             }
         }
 
         if let Some((index_change, wt_change, conflicted, untracked)) = count_files_statuses(r) {
             if index_change == 0 && wt_change == 0 && conflicted == 0 && untracked == 0 {
-                out.push(Green.paint("✔"));
+                out.push(Green.paint(" ✔"));
             } else {
                 if index_change > 0 {
-                    out.push(Green.paint(format!("♦{}", index_change)));
+                    out.push(Green.paint(format!(" ♦ {}", index_change)));
                 }
                 if conflicted > 0 {
-                    out.push(Red.paint(format!("✖{}", conflicted)));
+                    out.push(Red.paint(format!(" ✖ {}", conflicted)));
                 }
                 if wt_change > 0 {
-                    out.push(ANSIGenericString::from(format!("✚{}", wt_change)));
+                    out.push(ANSIGenericString::from(format!(" ✚ {}", wt_change)));
                 }
                 if untracked > 0 {
-                    out.push(ANSIGenericString::from("…"));
+                    out.push(ANSIGenericString::from(" …"));
                 }
             }
         }
