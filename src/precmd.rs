@@ -1,5 +1,5 @@
-use ansi_term::ANSIStrings;
 use ansi_term::Colour::{Blue, Cyan, Fixed, Green, Purple, Red, Yellow};
+use ansi_term::{ANSIGenericString, ANSIStrings};
 use clap::{App, Arg, ArgMatches, SubCommand};
 use git2::{self, Repository, StatusOptions};
 use regex::Regex;
@@ -22,21 +22,22 @@ fn repo_status(r: &Repository, detailed: bool) -> Option<String> {
 
     if let Some(name) = get_head_shortname(r) {
         out.push(Cyan.paint(name));
+        out.push(ANSIGenericString::from(" "))
     }
 
     if !detailed {
         if let Some((index_change, wt_change, conflicted, untracked)) = count_files_statuses(r) {
             if index_change != 0 || wt_change != 0 || conflicted != 0 || untracked != 0 {
-                out.push(Red.bold().paint(" *"));
+                out.push(Red.bold().paint("*"));
             }
         }
     } else {
         if let Some((ahead, behind)) = get_ahead_behind(r) {
             if ahead > 0 {
-                out.push(Cyan.paint(format!(" ↑ {}", ahead)));
+                out.push(Cyan.paint(format!("↑{}", ahead)));
             }
             if behind > 0 {
-                out.push(Cyan.paint(format!(" ↓ {}", behind)));
+                out.push(Cyan.paint(format!("↓{}", behind)));
             }
         }
 
@@ -45,22 +46,22 @@ fn repo_status(r: &Repository, detailed: bool) -> Option<String> {
                 out.push(Green.paint(" ✔"));
             } else {
                 if index_change > 0 {
-                    out.push(Green.paint(format!(" ♦ {}", index_change)));
+                    out.push(Green.paint(format!("♦{}", index_change)));
                 }
                 if conflicted > 0 {
-                    out.push(Red.paint(format!(" ✖ {}", conflicted)));
+                    out.push(Red.paint(format!("✖{}", conflicted)));
                 }
                 if wt_change > 0 {
-                    out.push(Yellow.paint(format!(" ✚ {}", wt_change)));
+                    out.push(Yellow.paint(format!("+{}", wt_change)));
                 }
                 if untracked > 0 {
-                    out.push(Fixed(245).paint(" …"));
+                    out.push(Fixed(245).paint("…"));
                 }
             }
         }
 
         if let Some(action) = get_action(r) {
-            out.push(Purple.paint(format!(" {}", action)));
+            out.push(Purple.paint(format!("{}", action)));
         }
     }
 
@@ -193,6 +194,7 @@ fn get_action(r: &Repository) -> Option<String> {
 
 pub fn display(sub_matches: &ArgMatches) {
     let my_path = env::current_dir().unwrap();
+    let my_user = env::var("USER").unwrap_or_default();
     let display_path = Blue.paint(shorten_path(my_path.to_str().unwrap()));
 
     let branch = match Repository::discover(my_path) {
@@ -202,7 +204,13 @@ pub fn display(sub_matches: &ArgMatches) {
     let display_branch = Cyan.paint(branch.unwrap_or_default());
 
     println!("");
-    println!("{} {} {}", Purple.paint("λ"), display_path, display_branch);
+    println!(
+        "{} {} {} {}",
+        Purple.paint("λ"),
+        Green.paint(my_user),
+        display_path,
+        display_branch
+    );
 }
 
 pub fn cli_arguments<'a>() -> App<'a, 'a> {
