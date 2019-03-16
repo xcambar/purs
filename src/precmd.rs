@@ -42,7 +42,7 @@ fn repo_status(r: &Repository, detailed: bool) -> Option<String> {
 
         if let Some((index_change, wt_change, conflicted, untracked)) = count_files_statuses(r) {
             if index_change == 0 && wt_change == 0 && conflicted == 0 && untracked == 0 {
-                out.push(Green.paint("✔"));
+                out.push(Green.paint(" ✔"));
             } else {
                 if index_change > 0 {
                     out.push(Green.paint(format!(" ♦ {}", index_change)));
