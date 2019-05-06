@@ -7,7 +7,7 @@ use clap::{ArgMatches, App, SubCommand, Arg};
 use tico::tico;
 
 fn shorten_path(cwd: &str) -> String {
-  let friendly_path = match env::home_dir() {
+  let friendly_path = match dirs::home_dir() {
     Some(path) => Regex::new(path.to_str().unwrap()).unwrap().replace(cwd, "~"),
     _ => return String::from("")
   };
@@ -196,7 +196,7 @@ pub fn display(sub_matches: &ArgMatches) {
   };
   let display_branch = Cyan.paint(branch.unwrap_or_default());
 
-  println!("");
+  println!();
   println!("{} {}", display_path, display_branch);
 }
 

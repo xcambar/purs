@@ -5,6 +5,7 @@ extern crate clap;
 extern crate git2;
 extern crate regex;
 extern crate tico;
+extern crate dirs;
 
 use clap::{App, AppSettings};
 
