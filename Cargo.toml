@@ -6,7 +6,7 @@ version = "0.1.0"
 [dependencies]
 ansi_term = "0.9"
 clap = "2.26.1"
-git2 = "0.6"
+git2 = "0.8"
 regex = "0.2"
 tico = "1.0.0"
 try_opt = "0.1.1"
