@@ -1,12 +1,6 @@
+#![deny(rust_2018_idioms)]
 #[macro_use]
 extern crate try_opt;
-extern crate ansi_term;
-extern crate clap;
-extern crate git2;
-extern crate regex;
-extern crate tico;
-extern crate dirs;
-
 use clap::{App, AppSettings};
 
 mod prompt;
