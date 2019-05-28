@@ -98,7 +98,7 @@ fn count_files_statuses(r: &Repository) -> Option<(usize, usize, usize, usize)> 
   let mut opts = StatusOptions::new();
   opts.include_untracked(true);
 
-  fn count_files(statuses: &git2::Statuses, status: git2::Status) -> usize {
+  fn count_files(statuses: &git2::Statuses<'_>, status: git2::Status) -> usize {
     statuses.iter().filter(|entry| entry.status().intersects(status)).count()
   }
 
@@ -186,7 +186,7 @@ fn get_action(r: &Repository) -> Option<String> {
   None
 }
 
-pub fn display(sub_matches: &ArgMatches) {
+pub fn display(sub_matches: &ArgMatches<'_>) {
   let my_path = env::current_dir().unwrap();
   let display_path = Blue.paint(shorten_path(my_path.to_str().unwrap()));
 
