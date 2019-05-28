@@ -1,6 +1,4 @@
 #![deny(rust_2018_idioms)]
-#[macro_use]
-extern crate try_opt;
 use clap::{App, AppSettings};
 
 mod precmd;
