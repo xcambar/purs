@@ -7,7 +7,7 @@ edition = "2018"
 [dependencies]
 ansi_term = "0.11"
 clap = "2.33"
+dirs = "2.0"
 git2 = "0.8"
 regex = "1.1.6"
 tico = "1.0.0"
-dirs = "2.0"
