@@ -68,30 +68,30 @@ fn repo_status(r: &Repository, detailed: bool) -> Option<String> {
 }
 
 fn get_ahead_behind(r: &Repository) -> Option<(usize, usize)> {
-    let head = try_opt!(r.head().ok());
+    let head = r.head().ok()?;
     if !head.is_branch() {
         return None;
     }
 
-    let head_name = try_opt!(head.shorthand());
-    let head_branch = try_opt!(r.find_branch(head_name, git2::BranchType::Local).ok());
-    let upstream = try_opt!(head_branch.upstream().ok());
-    let head_oid = try_opt!(head.target());
-    let upstream_oid = try_opt!(upstream.get().target());
+    let head_name = head.shorthand()?;
+    let head_branch = r.find_branch(head_name, git2::BranchType::Local).ok()?;
+    let upstream = head_branch.upstream().ok()?;
+    let head_oid = head.target()?;
+    let upstream_oid = upstream.get().target()?;
 
     r.graph_ahead_behind(head_oid, upstream_oid).ok()
 }
 
 fn get_head_shortname(r: &Repository) -> Option<String> {
-    let head = try_opt!(r.head().ok());
+    let head = r.head().ok()?;
     if let Some(shorthand) = head.shorthand() {
         if shorthand != "HEAD" {
             return Some(shorthand.to_string());
         }
     }
 
-    let object = try_opt!(head.peel(git2::ObjectType::Commit).ok());
-    let short_id = try_opt!(object.short_id().ok());
+    let object = head.peel(git2::ObjectType::Commit).ok()?;
+    let short_id = object.short_id().ok()?;
 
     Some(format!(
         ":{}",
@@ -110,7 +110,7 @@ fn count_files_statuses(r: &Repository) -> Option<(usize, usize, usize, usize)> 
             .count()
     }
 
-    let statuses = try_opt!(r.statuses(Some(&mut opts)).ok());
+    let statuses = r.statuses(Some(&mut opts)).ok()?;
 
     Some((
         count_files(
