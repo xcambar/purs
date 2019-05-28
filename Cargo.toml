@@ -5,8 +5,8 @@ authors = ["Xavier Cambar <xcambar@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-ansi_term = "0.9"
-clap = "2.26.1"
+ansi_term = "0.11"
+clap = "2.33"
 git2 = "0.8"
 regex = "0.2"
 tico = "1.0.0"
