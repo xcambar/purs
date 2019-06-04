@@ -16,7 +16,7 @@ Even more minimal, definitively faster and at least as pretty as the original Pu
 
 ```
 function zle-line-init zle-keymap-select {
-  PROMPT=`/PATH/TO/PURS/target/release/purs prompt -k "$KEYMAP" -r "$?"`
+  PROMPT=`/PATH/TO/PURS/target/release/purs prompt -k "$KEYMAP" -r "$?" --venv "${${VIRTUAL_ENV:t}%-*}"`
   zle reset-prompt
 }
 zle -N zle-line-init

@@ -8,7 +8,8 @@ const NO_ERROR:&str = "0";
 pub fn display(sub_matches: &ArgMatches) {
   let last_return_code = sub_matches.value_of("last_return_code").unwrap_or("0");
   let keymap = sub_matches.value_of("keymap").unwrap_or("US");
-  
+  let venv_name = sub_matches.value_of("venv").unwrap_or("");
+
   let symbol = match keymap {
     COMMAND_KEYMAP => COMMAND_SYMBOL,
     _ => INSERT_SYMBOL,
@@ -20,7 +21,12 @@ pub fn display(sub_matches: &ArgMatches) {
     _ => 9,
   };
 
-  print!("%F{{{}}}{}%f ", shell_color, symbol);
+  let venv = match venv_name.len() {
+    0 => String::from(""),
+    _ => format!("%F{{11}}|{}|%f ", venv_name),
+  };
+
+  print!("{}%F{{{}}}{}%f ", venv, shell_color, symbol);
 }
 
 pub fn cli_arguments<'a>() -> App<'a, 'a> {
@@ -33,6 +39,11 @@ pub fn cli_arguments<'a>() -> App<'a, 'a> {
     .arg(
       Arg::with_name("keymap")
         .short("k")
+        .takes_value(true)
+    )
+    .arg(
+      Arg::with_name("venv")
+        .long("venv")
         .takes_value(true)
     )
 }
