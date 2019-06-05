@@ -2,7 +2,7 @@ language: rust
 rust:
   - nightly
 script:
-  - rustup component add clippy-preview
+  - rustup component add clippy
   - cargo build --verbose
   - cargo clippy -- -D warnings
   - cargo test --verbose
