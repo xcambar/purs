@@ -1,6 +1,7 @@
 use clap::{App, Arg, ArgMatches, SubCommand};
 use std::env;
 use nix::unistd;
+use failure::Error;
 
 const INSERT_SYMBOL: &str = "❯";
 const COMMAND_SYMBOL: &str = "⬢";
@@ -9,17 +10,15 @@ const NO_ERROR: &str = "0";
 const SSH_SESSION_ENV: &str = "SSH_TTY";
 
 
-fn get_username() -> String {
-    match env::var("USER") {
-        Ok(name) => name,
-        Err(_) => "".to_string(),
-    }
+fn get_username() -> Result<String, Error> {
+    Ok(env::var("USER")?)
 }
 
-fn get_hostname() -> String {
+fn get_hostname() -> Result<String, Error> {
     let mut buf = [0u8; 64];
-    let hostname_cstr = unistd::gethostname(&mut buf).expect("Failed getting hostname");
-    hostname_cstr.to_str().expect("Hostname wasn't valid UTF-8").to_string()
+    let hostname_cstr = unistd::gethostname(&mut buf)?;
+    let hostname = hostname_cstr.to_str()?;
+    Ok(hostname.to_string())
 }
 
 pub fn display(sub_matches: &ArgMatches<'_>) {
@@ -44,7 +43,11 @@ pub fn display(sub_matches: &ArgMatches<'_>) {
     };
 
     let ssh_user_host = match env::var(SSH_SESSION_ENV) {
-        Ok(_) => format!("{}@{} ", get_username(), get_hostname()),
+        Ok(_) => {
+            let username = get_username().unwrap_or("".to_string());
+            let hostname = get_hostname().unwrap_or("".to_string());
+            format!("{}@{} ", username, hostname)
+        },
         Err(_) => "".to_string(),
     };
 
