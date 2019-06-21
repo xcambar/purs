@@ -44,8 +44,8 @@ pub fn display(sub_matches: &ArgMatches<'_>) {
 
     let ssh_user_host = match env::var(SSH_SESSION_ENV) {
         Ok(_) => {
-            let username = get_username().unwrap_or("".to_string());
-            let hostname = get_hostname().unwrap_or("".to_string());
+            let username = get_username().unwrap_or_else(|_| "".to_string());
+            let hostname = get_hostname().unwrap_or_else(|_| "".to_string());
             format!("{}@{} ", username, hostname)
         },
         Err(_) => "".to_string(),
