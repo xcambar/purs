@@ -44,7 +44,10 @@ pub fn display(sub_matches: &ArgMatches<'_>) {
     };
 
     if sub_matches.is_present("userhost") {
-        print!("{}{}@{} %F{{{}}}{}%f ", venv, userinfo, hostinfo, shell_color, symbol);
+        match userinfo.as_str() {
+            "root" => print!("{}%F{{009}}{}%f@%F{{014}}{}%f %F{{{}}}{}%f ", venv, userinfo, hostinfo, shell_color, symbol),
+            _ => print!("{}%F{{011}}{}%f@%F{{014}}{}%f %F{{{}}}{}%f ", venv, userinfo, hostinfo, shell_color, symbol),
+        }
     } else {
         print!("{}%F{{{}}}{}%f ", venv, shell_color, symbol);
     }
