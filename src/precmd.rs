@@ -48,10 +48,10 @@ fn repo_status(r: &Repository, detailed: bool) -> Option<String> {
                     out.push(Green.paint(format!("♦{}", index_change)));
                 }
                 if conflicted > 0 {
-                    out.push(Red.paint(format!("✖{}", conflicted)));
+                    out.push(Red.paint(format!("✖ {}", conflicted)));
                 }
                 if wt_change > 0 {
-                    out.push(ANSIGenericString::from(format!("✚{}", wt_change)));
+                    out.push(ANSIGenericString::from(format!("✚ {}", wt_change)));
                 }
                 if untracked > 0 {
                     out.push(ANSIGenericString::from("…"));
@@ -201,14 +201,19 @@ pub fn display(sub_matches: &ArgMatches<'_>) {
     };
     let display_branch = Cyan.paint(branch.unwrap_or_default());
 
-    println!();
+    if sub_matches.is_present("newline") {
+        println!();
+    }
     println!("{} {}", display_path, display_branch);
 }
 
 pub fn cli_arguments<'a>() -> App<'a, 'a> {
-    SubCommand::with_name("precmd").arg(
-        Arg::with_name("git-detailed")
+    SubCommand::with_name("precmd")
+        .arg(Arg::with_name("git-detailed")
             .long("git-detailed")
-            .help("Prints detailed git status"),
-    )
+            .help("Prints detailed git status"))
+        .arg(Arg::with_name("newline")
+             .long("newline")
+             .short("n")
+             .help("Prints a blank line before anything else"))
 }
