@@ -63,7 +63,7 @@ pub fn cli_arguments<'a>() -> App<'a, 'a> {
         )
         .arg(Arg::with_name("keymap").short("k").takes_value(true))
         .arg(Arg::with_name("venv").short("v").long("venv").takes_value(true))
-        .arg(Arg::with_name("userhost").short("u").long("uh"))
+        .arg(Arg::with_name("userhost").short("u").long("uh").help("Posts a $user@$host info prior prompt"))
         .arg(Arg::with_name("prompt_symbol").short("p").long("prompt_symbol").help("Changes the prompt symbol").takes_value(true))
         .arg(Arg::with_name("command_symbol").short("c").long("command_symbol").help("Changes the command symbol (vim mode)").takes_value(true))
 }

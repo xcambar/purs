@@ -215,5 +215,5 @@ pub fn cli_arguments<'a>() -> App<'a, 'a> {
         .arg(Arg::with_name("newline")
              .long("newline")
              .short("n")
-             .help("Prints a blank line before anything else"))
+             .help("Prints a blank line before the precmd"))
 }
