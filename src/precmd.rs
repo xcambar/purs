@@ -209,11 +209,15 @@ pub fn display(sub_matches: &ArgMatches<'_>) {
 
 pub fn cli_arguments<'a>() -> App<'a, 'a> {
     SubCommand::with_name("precmd")
-        .arg(Arg::with_name("git-detailed")
-            .long("git-detailed")
-            .help("Prints detailed git status"))
-        .arg(Arg::with_name("newline")
-             .long("newline")
-             .short("n")
-             .help("Prints a blank line before the precmd"))
+        .arg(
+            Arg::with_name("git-detailed")
+                .long("git-detailed")
+                .help("Prints detailed git status"),
+        )
+        .arg(
+            Arg::with_name("newline")
+                .long("newline")
+                .short("n")
+                .help("Prints a blank line before the precmd"),
+        )
 }
