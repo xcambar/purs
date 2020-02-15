@@ -6,6 +6,7 @@ use std::env;
 const COMMAND_SYMBOL: &str = "⬢";
 const COMMAND_KEYMAP: &str = "vicmd";
 const NO_ERROR: &str = "0";
+const SSH_SESSION_ENV: &str = "SSH_TTY";
 
 fn get_username() -> Result<String, Error> {
     Ok(env::var("USER")?)
@@ -29,6 +30,9 @@ pub fn display(sub_matches: &ArgMatches<'_>) {
     let _command_symbol: &str = sub_matches
         .value_of("command_symbol")
         .unwrap_or(COMMAND_SYMBOL);
+
+    let _showinfo = sub_matches.is_present("userhost");
+    let _sshinfo = sub_matches.is_present("sshinfo");
     let userinfo = get_username().unwrap_or_else(|_| "".to_string());
     let hostinfo = get_hostname().unwrap_or_else(|_| "".to_string());
 
@@ -48,7 +52,23 @@ pub fn display(sub_matches: &ArgMatches<'_>) {
         _ => format!("%F{{11}}|{}|%f ", venv_name),
     };
 
-    if sub_matches.is_present("userhost") {
+    if _showinfo && _sshinfo {
+        match env::var(SSH_SESSION_ENV) {
+            Ok(_) => match userinfo.as_str() {
+                "root" => print!(
+                    "{}%F{{009}}{}%f@%F{{014}}{}%f %F{{{}}}{}%f ",
+                    venv, userinfo, hostinfo, shell_color, symbol
+                ),
+                _ => print!(
+                    "{}%F{{011}}{}%f@%F{{014}}{}%f %F{{{}}}{}%f ",
+                    venv, userinfo, hostinfo, shell_color, symbol
+                ),
+            },
+            Err(_) => {
+                print!("{}%F{{{}}}{}%f ", venv, shell_color, symbol);
+            }
+        }
+    } else if _showinfo {
         match userinfo.as_str() {
             "root" => print!(
                 "{}%F{{009}}{}%f@%F{{014}}{}%f %F{{{}}}{}%f ",
@@ -81,8 +101,14 @@ pub fn cli_arguments<'a>() -> App<'a, 'a> {
         .arg(
             Arg::with_name("userhost")
                 .short("u")
-                .long("uh")
+                .long("userhost")
                 .help("Posts a $user@$host info prior prompt"),
+        )
+        .arg(
+            Arg::with_name("sshinfo")
+                .short("s")
+                .long("sshinfo")
+                .help("Only print $user@$host when inside ssh session"),
         )
         .arg(
             Arg::with_name("prompt_symbol")
